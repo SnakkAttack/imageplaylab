@@ -1,0 +1,107 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: dark light;
+  }
+
+  * { box-sizing: border-box; }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* ── Range inputs — amber accent ─────────────────────── */
+  input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    background: transparent;
+    cursor: pointer;
+    width: 100%;
+  }
+
+  input[type="range"]::-webkit-slider-runnable-track {
+    height: 1.5px;
+    border-radius: 1px;
+    background: linear-gradient(
+      to right,
+      #FFAA00 0%,
+      #FFAA00 var(--range-pct, 0%),
+      #2A2A30 var(--range-pct, 0%),
+      #2A2A30 100%
+    );
+  }
+
+  input[type="range"]::-moz-range-track {
+    height: 1.5px;
+    background: #2A2A30;
+  }
+
+  input[type="range"]::-moz-range-progress {
+    height: 1.5px;
+    background: #FFAA00;
+  }
+
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #FFAA00;
+    box-shadow: 0 0 6px rgba(255,170,0,0.4);
+    margin-top: -5.25px;
+    transition: transform 0.1s ease, box-shadow 0.15s ease;
+  }
+
+  input[type="range"]::-moz-range-thumb {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #FFAA00;
+    border: none;
+    box-shadow: 0 0 6px rgba(255,170,0,0.4);
+  }
+
+  input[type="range"]:hover::-webkit-slider-thumb {
+    transform: scale(1.2);
+    box-shadow: 0 0 10px rgba(255,170,0,0.6);
+  }
+
+  input[type="range"]:focus-visible { outline: none; }
+  input[type="range"]:focus-visible::-webkit-slider-thumb {
+    box-shadow: 0 0 0 3px rgba(255,170,0,0.2);
+  }
+}
+
+@layer utilities {
+  /* Hide scrollbar while keeping scroll functionality */
+  .scrollbar-none {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .scrollbar-none::-webkit-scrollbar { display: none; }
+
+  /* Thin dark scrollbar */
+  .scrollbar-dark {
+    scrollbar-width: thin;
+    scrollbar-color: #2A2A30 transparent;
+  }
+  .scrollbar-dark::-webkit-scrollbar { width: 3px; }
+  .scrollbar-dark::-webkit-scrollbar-track { background: transparent; }
+  .scrollbar-dark::-webkit-scrollbar-thumb {
+    background: #2A2A30;
+    border-radius: 2px;
+  }
+
+  /* Amber text glow — used sparingly */
+  .text-glow {
+    text-shadow: 0 0 8px rgba(255,170,0,0.4);
+  }
+
+  /* Horizontal rule separator */
+  .rule { border-top: 1px solid #2A2A30; }
+}
