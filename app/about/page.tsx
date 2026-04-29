@@ -39,7 +39,7 @@ export default function AboutPage() {
           <h1 className="font-mono text-3xl font-bold text-night leading-tight mb-6">Image Play Lab</h1>
           <div className="w-full h-px bg-night-400 mb-6" />
           <p className="font-mono text-xs text-night-50 leading-[1.9]">
-            A project for a digital image processing course. Built to make abstract algorithms tangible:
+            A project for Image Processing. Built to make abstract algorithms tangible:
             upload a real image, adjust real parameters, and see the math come alive in the browser.
           </p>
         </div>
@@ -85,10 +85,6 @@ export default function AboutPage() {
               Image Play Lab is built for that gap. Every module combines the intuition and the math,
               then puts you in control of the parameters. You can see that a median filter outperforms
               Gaussian blur on salt-and-pepper noise in seconds, not after three lectures.
-            </p>
-            <p>
-              It is also designed for classroom use. A professor can pull this up, upload a lecture
-              photo, and live-demonstrate any of the eight modules without installing anything.
             </p>
           </div>
         </section>
