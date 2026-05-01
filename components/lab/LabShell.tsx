@@ -145,10 +145,10 @@ export function LabShell() {
       />
 
       {/* Main content */}
-      <div className="flex-1 grid grid-cols-[1fr_240px] min-h-0 divide-x divide-night-400">
+      <div className="flex-1 flex flex-col md:grid md:grid-cols-[1fr_240px] min-h-0 divide-y md:divide-y-0 md:divide-x divide-night-400">
 
         {/* ── Center: image workspace ──────────────────────────── */}
-        <main className="flex flex-col min-h-0">
+        <main className="flex flex-col min-h-0 flex-1 md:flex-none">
           {hasImage ? (
             <>
               {/* Status bar */}
@@ -178,7 +178,7 @@ export function LabShell() {
         </main>
 
         {/* ── Right: instrument panel ──────────────────────────── */}
-        <aside className="flex flex-col overflow-y-auto scrollbar-dark bg-night-700 divide-y divide-night-400">
+        <aside className="flex flex-col overflow-y-auto scrollbar-dark bg-night-700 divide-y divide-night-400 h-72 md:h-auto shrink-0 md:shrink">
 
           {/* Controls */}
           <div className="p-4">

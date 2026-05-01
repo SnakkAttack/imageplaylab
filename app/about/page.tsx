@@ -31,7 +31,7 @@ export default function AboutPage() {
     <div className="min-h-screen bg-night-800 flex flex-col">
       <Header />
 
-      <main className="flex-1 max-w-2xl mx-auto px-6 py-16 w-full">
+      <main className="flex-1 max-w-2xl mx-auto px-4 sm:px-6 py-10 sm:py-16 w-full">
 
         {/* Title */}
         <div className="mb-14">
@@ -48,7 +48,7 @@ export default function AboutPage() {
         <section className="mb-14">
           <p className="font-mono text-3xs text-amber uppercase tracking-[0.2em] mb-6">Contributors</p>
           <div className="flex flex-col divide-y divide-night-400 border-t border-night-400">
-            <div className="flex items-start gap-6 py-4">
+            <div className="flex items-start gap-4 sm:gap-6 py-4">
               <span className="font-mono text-2xs text-night w-16 shrink-0 pt-0.5">Gage</span>
               <div>
                 <p className="font-mono text-xs text-night mb-1">Backend + Deployment</p>
@@ -58,7 +58,7 @@ export default function AboutPage() {
                 </p>
               </div>
             </div>
-            <div className="flex items-start gap-6 py-4">
+            <div className="flex items-start gap-4 sm:gap-6 py-4">
               <span className="font-mono text-2xs text-night w-16 shrink-0 pt-0.5">Sam</span>
               <div>
                 <p className="font-mono text-xs text-night mb-1">Frontend + UI/UX</p>
@@ -94,9 +94,9 @@ export default function AboutPage() {
           <p className="font-mono text-3xs text-amber uppercase tracking-[0.2em] mb-6">Concepts covered</p>
           <div className="flex flex-col divide-y divide-night-400 border-t border-night-400">
             {CONCEPTS.map((c) => (
-              <div key={c.n} className="flex items-start gap-6 py-3">
+              <div key={c.n} className="flex items-start gap-3 sm:gap-6 py-3">
                 <span className="font-mono text-3xs text-amber/50 w-6 shrink-0 mt-0.5">{c.n}</span>
-                <span className="font-mono text-2xs text-night w-36 shrink-0">{c.name}</span>
+                <span className="font-mono text-2xs text-night w-24 sm:w-36 shrink-0">{c.name}</span>
                 <span className="font-mono text-3xs text-night-100 leading-relaxed">{c.detail}</span>
               </div>
             ))}
@@ -119,8 +119,8 @@ export default function AboutPage() {
           </div>
           <div className="flex flex-col divide-y divide-night-400 border-t border-night-400">
             {TECH.map((t) => (
-              <div key={t.name} className="flex items-center gap-6 py-3">
-                <span className="font-mono text-2xs text-night w-32 shrink-0">{t.name}</span>
+              <div key={t.name} className="flex items-center gap-4 sm:gap-6 py-3">
+                <span className="font-mono text-2xs text-night w-24 sm:w-32 shrink-0">{t.name}</span>
                 <span className="font-mono text-3xs text-night-100">{t.role}</span>
               </div>
             ))}
@@ -152,7 +152,7 @@ types/image.ts             TypeScript interfaces`}</pre>
         </section>
 
         {/* CTA */}
-        <div className="border border-night-400 rounded p-8 flex flex-col items-center text-center gap-5 bg-night-700">
+        <div className="border border-night-400 rounded p-5 sm:p-8 flex flex-col items-center text-center gap-5 bg-night-700">
           <p className="font-mono text-3xs text-amber uppercase tracking-[0.2em]">Try it yourself</p>
           <p className="font-mono text-lg font-bold text-night leading-tight">
             No login. No install.<br />Open the lab and start learning.

@@ -15,7 +15,7 @@
     text-rendering: optimizeLegibility;
   }
 
-  /* ── Range inputs — amber accent ─────────────────────── */
+  /* ── Range inputs: amber accent ─────────────────────── */
   input[type="range"] {
     -webkit-appearance: none;
     appearance: none;
@@ -97,7 +97,7 @@
     border-radius: 2px;
   }
 
-  /* Amber text glow — used sparingly */
+  /* Amber text glow, use sparingly */
   .text-glow {
     text-shadow: 0 0 8px rgba(255,170,0,0.4);
   }

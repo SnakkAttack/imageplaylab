@@ -38,7 +38,7 @@ export function Header({ lab = false }: HeaderProps) {
       </Link>
       <div className="flex-1" />
       <nav className="flex items-center gap-0.5">
-        <Link href="/"     className="h-7 px-3 flex items-center font-mono text-2xs text-night-100 hover:text-night transition-colors rounded">Home</Link>
+        <Link href="/"     className="hidden sm:flex h-7 px-3 items-center font-mono text-2xs text-night-100 hover:text-night transition-colors rounded">Home</Link>
         <Link href="/about" className="h-7 px-3 flex items-center font-mono text-2xs text-night-100 hover:text-night transition-colors rounded">About</Link>
         <Link href="/lab"
           className="ml-2 h-7 px-3 flex items-center font-mono text-2xs font-bold text-night-800 bg-amber hover:bg-amber-100 transition-colors rounded"

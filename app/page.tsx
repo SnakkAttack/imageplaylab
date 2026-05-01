@@ -141,10 +141,10 @@ export default function HomePage() {
       <Header />
 
       {/* ── Hero: asymmetric editorial split ───────────────── */}
-      <section className="flex min-h-[calc(100vh-44px)] border-b border-night-400">
+      <section className="flex flex-col md:flex-row min-h-[calc(100vh-44px)] border-b border-night-400">
 
         {/* Left: typographic statement */}
-        <div className="w-[42%] flex flex-col justify-center px-14 py-16 border-r border-night-400">
+        <div className="w-full md:w-[42%] flex flex-col justify-center px-6 md:px-14 py-10 md:py-16 border-b md:border-b-0 md:border-r border-night-400">
           <span className="font-mono text-3xs text-amber uppercase tracking-[0.2em] mb-10">
             v1.0 / Interactive Tool
           </span>
@@ -195,7 +195,7 @@ export default function HomePage() {
         </div>
 
         {/* Right: app preview */}
-        <div className="flex-1 flex items-center justify-center p-12 bg-night-900">
+        <div className="flex-1 flex items-center justify-center p-6 md:p-12 bg-night-900">
           <div className="w-full max-w-md">
             <LabMockup />
             <p className="font-mono text-3xs text-night-200 text-center mt-4">
@@ -207,22 +207,22 @@ export default function HomePage() {
 
       {/* ── Module manifest ──────────────────────────────────── */}
       <section className="border-b border-night-400">
-        <div className="px-14 py-8">
+        <div className="px-6 md:px-14 py-8">
           <p className="font-mono text-3xs text-amber uppercase tracking-[0.2em] mb-6">Curriculum</p>
           <div className="flex flex-col">
             {MODULES.map((m, i) => (
               <Link
                 href="/lab"
                 key={m.n}
-                className="group flex items-start gap-6 py-3.5 border-b border-night-400 last:border-0 hover:bg-night-700 -mx-14 px-14 transition-colors"
+                className="group flex items-start gap-4 md:gap-6 py-3.5 border-b border-night-400 last:border-0 hover:bg-night-700 -mx-6 px-6 md:-mx-14 md:px-14 transition-colors"
               >
                 <span className="font-mono text-3xs text-amber/50 group-hover:text-amber transition-colors w-6 shrink-0 mt-0.5">
                   {m.n}
                 </span>
-                <span className="font-mono text-xs text-night group-hover:text-amber transition-colors w-40 shrink-0">
+                <span className="font-mono text-xs text-night group-hover:text-amber transition-colors w-28 md:w-40 shrink-0">
                   {m.name}
                 </span>
-                <span className="font-mono text-3xs text-night-100 group-hover:text-night-50 transition-colors leading-relaxed">
+                <span className="font-mono text-3xs text-night-100 group-hover:text-night-50 transition-colors leading-relaxed hidden sm:block">
                   {m.ops.join("  ·  ")}
                 </span>
                 <span className="ml-auto font-mono text-3xs text-night-400 group-hover:text-amber transition-colors">→</span>
@@ -234,9 +234,9 @@ export default function HomePage() {
 
       {/* ── How it works ─────────────────────────────────────── */}
       <section className="border-b border-night-400">
-        <div className="px-14 py-12">
+        <div className="px-6 md:px-14 py-12">
           <p className="font-mono text-3xs text-amber uppercase tracking-[0.2em] mb-8">Workflow</p>
-          <div className="grid grid-cols-5 gap-0 divide-x divide-night-400">
+          <div className="grid grid-cols-2 sm:grid-cols-5 gap-6 sm:gap-0 sm:divide-x sm:divide-night-400">
             {[
               { n: "01", label: "Upload",    sub: "Any image,\nor use a sample" },
               { n: "02", label: "Select",    sub: "Pick a module\nfrom the tab strip" },
@@ -244,7 +244,7 @@ export default function HomePage() {
               { n: "04", label: "Compare",   sub: "Split view or\nslider comparison" },
               { n: "05", label: "Understand", sub: "Read the math\nand intuition" },
             ].map((step) => (
-              <div key={step.n} className="flex flex-col gap-3 px-6 first:pl-0 last:pr-0">
+              <div key={step.n} className="flex flex-col gap-2 sm:gap-3 sm:px-6 sm:first:pl-0 sm:last:pr-0">
                 <span className="font-mono text-2xs text-amber">{step.n}</span>
                 <span className="font-mono text-sm font-bold text-night">{step.label}</span>
                 <span className="font-mono text-3xs text-night-100 leading-relaxed whitespace-pre-line">{step.sub}</span>
@@ -256,7 +256,7 @@ export default function HomePage() {
 
       {/* ── Technical spec ───────────────────────────────────── */}
       <section className="border-b border-night-400">
-        <div className="px-14 py-12 grid grid-cols-2 gap-16">
+        <div className="px-6 md:px-14 py-12 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16">
           <div>
             <p className="font-mono text-3xs text-amber uppercase tracking-[0.2em] mb-6">Architecture</p>
             <div className="flex flex-col gap-0 divide-y divide-night-400">
@@ -299,7 +299,7 @@ export default function HomePage() {
       </section>
 
       {/* ── CTA ──────────────────────────────────────────────── */}
-      <section className="px-14 py-16 flex items-center justify-between">
+      <section className="px-6 md:px-14 py-12 md:py-16 flex flex-col md:flex-row items-start md:items-center gap-6 md:gap-0 justify-between">
         <div>
           <p className="font-mono text-3xs text-amber uppercase tracking-[0.2em] mb-3">Ready?</p>
           <p className="font-mono text-2xl font-bold text-night leading-tight">
