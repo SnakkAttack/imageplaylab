@@ -16,7 +16,7 @@ const TABS: { value: Tab; label: string }[] = [
 ];
 
 export function ExplanationCard({ explanation }: { explanation: ModuleExplanation }) {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const [tab, setTab]   = useState<Tab>("plain");
 
   const content: Record<Tab, string> = {

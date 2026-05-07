@@ -159,10 +159,10 @@ export function LabShell() {
       />
 
       {/* Main content */}
-      <div className="flex-1 flex flex-col md:grid md:grid-cols-[1fr_240px] min-h-0 divide-y md:divide-y-0 md:divide-x divide-night-400">
+      <div className="flex-1 flex flex-col md:grid md:grid-cols-[1fr_240px] md:grid-rows-[1fr_auto] md:min-h-0">
 
-        {/* ── Center: image workspace + insights ───────────────── */}
-        <main className="flex flex-col min-h-0 flex-1 md:flex-none">
+        {/* ── Center: image workspace ───────────────────────────── */}
+        <main className="flex flex-col h-[320px] md:h-auto md:min-h-0 md:overflow-hidden">
           {hasImage ? (
             <>
               {/* Status bar */}
@@ -195,13 +195,10 @@ export function LabShell() {
           ) : (
             <ImageUploader onImageLoaded={handleImageLoaded} />
           )}
-
-          {/* Insights panel: full width below the canvas */}
-          <ExplanationCard explanation={activeModule.explanation} />
         </main>
 
         {/* ── Right: instrument panel ──────────────────────────── */}
-        <aside className="flex flex-col overflow-y-auto scrollbar-dark bg-night-700 divide-y divide-night-400 h-72 md:h-auto shrink-0 md:shrink">
+        <aside className="flex flex-col overflow-y-auto scrollbar-dark bg-night-700 divide-y divide-night-400 md:row-span-2 border-t md:border-t-0 md:border-l border-night-400">
 
           {/* Controls */}
           <div className="p-4">
@@ -252,6 +249,9 @@ export function LabShell() {
             </div>
           )}
         </aside>
+
+        {/* ── Insights: below canvas on desktop, bottom on mobile ── */}
+        <ExplanationCard explanation={activeModule.explanation} />
       </div>
     </div>
   );

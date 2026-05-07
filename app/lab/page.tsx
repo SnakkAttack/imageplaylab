@@ -8,7 +8,7 @@ export const metadata = {
 
 export default function LabPage() {
   return (
-    <div className="h-screen flex flex-col bg-night-800 overflow-hidden">
+    <div className="min-h-screen md:h-screen flex flex-col bg-night-800 md:overflow-hidden">
       <Header lab />
       <LabShell />
     </div>
