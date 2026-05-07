@@ -65,7 +65,7 @@ export function ImageUploader({ onImageLoaded }: ImageUploaderProps) {
   }, [onImageLoaded]);
 
   return (
-    <div className="flex-1 flex flex-col items-center justify-center gap-12 p-10 bg-night-900">
+    <div className="flex-1 flex flex-col items-center justify-center gap-5 md:gap-12 p-5 md:p-10 bg-night-900">
       {/* Drop zone */}
       <div
         onDragOver={(e) => { e.preventDefault(); setDragging(true); }}
@@ -77,7 +77,7 @@ export function ImageUploader({ onImageLoaded }: ImageUploaderProps) {
         tabIndex={0}
         className={`
           relative flex flex-col items-center justify-center
-          w-full max-w-sm aspect-video rounded-xl cursor-pointer
+          w-full max-w-xs md:max-w-sm aspect-video rounded-xl cursor-pointer
           border transition-all duration-200 outline-none
           focus-visible:ring-1 focus-visible:ring-amber/40
           ${dragging

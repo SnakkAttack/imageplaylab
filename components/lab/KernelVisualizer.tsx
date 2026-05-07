@@ -94,10 +94,12 @@ function cellStyle(v: number, maxAbs: number): string {
 
 function getCellCls(n: number, size: "sm" | "lg", pairMode: boolean): string {
   if (size === "lg") {
-    if (pairMode) return n <= 3 ? "w-14 h-11 text-xl" : "w-10 h-9 text-sm";
-    if (n <= 3) return "w-20 h-14 text-2xl";
-    if (n <= 5) return "w-14 h-11 text-lg";
-    return "w-12 h-9 text-xs";
+    if (pairMode) return n <= 3
+      ? "w-8 h-7 text-base md:w-14 md:h-11 md:text-xl"
+      : "w-6 h-5 text-xs md:w-10 md:h-9 md:text-sm";
+    if (n <= 3) return "w-12 h-9 text-xl md:w-20 md:h-14 md:text-2xl";
+    if (n <= 5) return "w-9 h-7 text-sm md:w-14 md:h-11 md:text-lg";
+    return "w-6 h-5 text-[9px] md:w-12 md:h-9 md:text-xs";
   }
   if (pairMode) return "w-6 h-[18px] text-[7px]";
   if (n <= 3) return "w-8 h-[22px] text-[9px]";
@@ -119,7 +121,7 @@ function KernelGrid({
   const n = rows.length;
   const maxAbs = Math.max(...rows.flat().map(Math.abs), 1e-9);
   const cellCls = getCellCls(n, size, pairMode);
-  const gapCls = size === "lg" ? "gap-1" : "gap-px";
+  const gapCls = size === "lg" ? "gap-0.5 md:gap-1" : "gap-px";
   const labelCls = size === "lg"
     ? "font-mono text-xs text-night-200 mb-1"
     : "font-mono text-3xs text-night-200 mb-0.5";

@@ -56,11 +56,20 @@ export function ImageWorkspace({ imageState, operationLabel, processedLabel, ope
   };
 
   useEffect(() => {
-    const onMove = (e: MouseEvent) => { if (dragging.current) updateSlider(e.clientX); };
-    const onUp   = () => { dragging.current = false; };
-    window.addEventListener("mousemove", onMove);
-    window.addEventListener("mouseup",   onUp);
-    return () => { window.removeEventListener("mousemove", onMove); window.removeEventListener("mouseup", onUp); };
+    const onMove      = (e: MouseEvent)      => { if (dragging.current) updateSlider(e.clientX); };
+    const onUp        = ()                   => { dragging.current = false; };
+    const onTouchMove = (e: TouchEvent)      => { if (dragging.current) { e.preventDefault(); updateSlider(e.touches[0].clientX); } };
+    const onTouchEnd  = ()                   => { dragging.current = false; };
+    window.addEventListener("mousemove",  onMove);
+    window.addEventListener("mouseup",    onUp);
+    window.addEventListener("touchmove",  onTouchMove, { passive: false });
+    window.addEventListener("touchend",   onTouchEnd);
+    return () => {
+      window.removeEventListener("mousemove",  onMove);
+      window.removeEventListener("mouseup",    onUp);
+      window.removeEventListener("touchmove",  onTouchMove);
+      window.removeEventListener("touchend",   onTouchEnd);
+    };
   }, []);
 
   const handleDownload = () => {
@@ -78,7 +87,7 @@ export function ImageWorkspace({ imageState, operationLabel, processedLabel, ope
         <SegmentedControl options={viewOpts} value={mode} onChange={setMode} />
         <div className="flex-1" />
         {width > 0 && (
-          <div className="flex items-center gap-2 font-mono text-3xs text-night-100">
+          <div className="hidden md:flex items-center gap-2 font-mono text-3xs text-night-100">
             <span>{width}×{height}</span>
             {fileSize > 0 && <span>·</span>}
             {fileSize > 0 && <span>{(fileSize / 1024).toFixed(0)}K</span>}
@@ -111,6 +120,7 @@ export function ImageWorkspace({ imageState, operationLabel, processedLabel, ope
             ref={sliderRef}
             className="relative h-full select-none cursor-col-resize"
             onMouseDown={(e) => { dragging.current = true; updateSlider(e.clientX); }}
+            onTouchStart={(e) => { dragging.current = true; updateSlider(e.touches[0].clientX); }}
           >
             {procUrl && <img src={procUrl} alt="processed" className="absolute inset-0 w-full h-full object-contain" draggable={false} />}
             {origUrl && (
@@ -142,7 +152,7 @@ export function ImageWorkspace({ imageState, operationLabel, processedLabel, ope
         )}
 
         {mode === "kernel" && operationId && params && (
-          <div className="h-full flex flex-col items-center justify-center gap-6 p-8">
+          <div className="h-full flex flex-col items-center justify-center gap-3 md:gap-6 p-4 md:p-8 overflow-auto">
             <p className="font-mono text-xs text-night-100 uppercase tracking-widest">
               {operationLabel.toLowerCase()} kernel
             </p>
