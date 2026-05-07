@@ -1,4 +1,4 @@
-// Edge detection: Sobel, Laplacian, and the full Canny pipeline.
+// Edge detection: Sobel, Laplacian, Prewitt, Scharr, and the full Canny pipeline.
 // Canny was by far the hardest to implement from scratch, had to carefully follow
 // the original Canny (1986) paper for NMS and hysteresis to get clean edges.
 // Gage
@@ -62,6 +62,59 @@ export function applyLaplacian(src: ImageData, scale: number): ImageData {
       const val = clamp255(Math.abs(lap) * scale);
       const outIdx = (y * width + x) * 4;
       dst.data[outIdx] = dst.data[outIdx + 1] = dst.data[outIdx + 2] = val;
+      dst.data[outIdx + 3] = 255;
+    }
+  }
+  return dst;
+}
+
+export function applyPrewitt(src: ImageData, scale: number): ImageData {
+  const { width, height } = src;
+  const gray = toGray(src);
+  const dst = blankLike(src);
+
+  // Prewitt is like Sobel but without the 2x center weighting, simpler kernel
+  for (let y = 0; y < height; y++) {
+    for (let x = 0; x < width; x++) {
+      const gx =
+        -at(gray, x - 1, y - 1, width, height) + at(gray, x + 1, y - 1, width, height) +
+        -at(gray, x - 1, y,     width, height)  + at(gray, x + 1, y,     width, height) +
+        -at(gray, x - 1, y + 1, width, height) + at(gray, x + 1, y + 1, width, height);
+
+      const gy =
+        -at(gray, x - 1, y - 1, width, height) - at(gray, x, y - 1, width, height) - at(gray, x + 1, y - 1, width, height) +
+         at(gray, x - 1, y + 1, width, height) + at(gray, x, y + 1, width, height) + at(gray, x + 1, y + 1, width, height);
+
+      const mag = clamp255(Math.sqrt(gx * gx + gy * gy) * scale);
+      const outIdx = (y * width + x) * 4;
+      dst.data[outIdx] = dst.data[outIdx + 1] = dst.data[outIdx + 2] = mag;
+      dst.data[outIdx + 3] = 255;
+    }
+  }
+  return dst;
+}
+
+export function applyScharr(src: ImageData, scale: number): ImageData {
+  const { width, height } = src;
+  const gray = toGray(src);
+  const dst = blankLike(src);
+
+  // Scharr has better rotational symmetry than Sobel, useful when angle accuracy matters.
+  // Values are ~10x larger so we scale down by 0.1 to keep output in the same visual range.
+  for (let y = 0; y < height; y++) {
+    for (let x = 0; x < width; x++) {
+      const gx =
+        -3  * at(gray, x - 1, y - 1, width, height) + 3  * at(gray, x + 1, y - 1, width, height) +
+        -10 * at(gray, x - 1, y,     width, height)  + 10 * at(gray, x + 1, y,     width, height) +
+        -3  * at(gray, x - 1, y + 1, width, height) + 3  * at(gray, x + 1, y + 1, width, height);
+
+      const gy =
+        -3  * at(gray, x - 1, y - 1, width, height) - 10 * at(gray, x, y - 1, width, height) - 3  * at(gray, x + 1, y - 1, width, height) +
+         3  * at(gray, x - 1, y + 1, width, height) + 10 * at(gray, x, y + 1, width, height) + 3  * at(gray, x + 1, y + 1, width, height);
+
+      const mag = clamp255(Math.sqrt(gx * gx + gy * gy) * scale * 0.1);
+      const outIdx = (y * width + x) * 4;
+      dst.data[outIdx] = dst.data[outIdx + 1] = dst.data[outIdx + 2] = mag;
       dst.data[outIdx + 3] = 255;
     }
   }
@@ -134,7 +187,7 @@ export function applyCanny(src: ImageData, lowThreshold: number, highThreshold: 
     }
   }
 
-  // Step 3: Non-maximum suppression -- keep only local gradient maxima along the edge direction
+  // Step 3: Non-maximum suppression, keep only local gradient maxima along the edge direction
   const nms = new Float32Array(width * height);
   for (let y = 1; y < height - 1; y++) {
     for (let x = 1; x < width - 1; x++) {
@@ -155,7 +208,7 @@ export function applyCanny(src: ImageData, lowThreshold: number, highThreshold: 
     }
   }
 
-  // Step 4: Hysteresis thresholding -- strong edges are definite; weak edges only
+  // Step 4: Hysteresis thresholding, strong edges are definite, weak edges only
   // survive if they are connected (8-neighbor) to a strong edge
   const STRONG = 255, WEAK = 75;
   const edges = new Uint8Array(width * height);
@@ -164,19 +217,34 @@ export function applyCanny(src: ImageData, lowThreshold: number, highThreshold: 
     else if (nms[i] >= lowThreshold)  edges[i] = WEAK;
   }
 
-  // Single pass to promote weak edges adjacent to a strong edge
-  // (a full BFS would be more correct but one pass is fast and good enough visually)
-  for (let y = 1; y < height - 1; y++) {
-    for (let x = 1; x < width - 1; x++) {
-      if (edges[y * width + x] === WEAK) {
-        const nbrs = [
-          edges[(y - 1) * width + x - 1], edges[(y - 1) * width + x], edges[(y - 1) * width + x + 1],
-          edges[y * width + x - 1],                                     edges[y * width + x + 1],
-          edges[(y + 1) * width + x - 1], edges[(y + 1) * width + x], edges[(y + 1) * width + x + 1],
-        ];
-        edges[y * width + x] = nbrs.some((n) => n === STRONG) ? STRONG : 0;
+  // BFS flood-fill from every strong edge pixel.
+  // A single scan-line pass misses weak→strong connections that point right/down,
+  // which causes the dotted-line artifact. BFS handles all directions correctly.
+  const queue: number[] = [];
+  for (let i = 0; i < edges.length; i++) {
+    if (edges[i] === STRONG) queue.push(i);
+  }
+  let head = 0;
+  while (head < queue.length) {
+    const idx = queue[head++];
+    const cy = Math.floor(idx / width);
+    const cx = idx % width;
+    for (let dy = -1; dy <= 1; dy++) {
+      for (let dx = -1; dx <= 1; dx++) {
+        if (dy === 0 && dx === 0) continue;
+        const ny = cy + dy, nx = cx + dx;
+        if (ny < 0 || ny >= height || nx < 0 || nx >= width) continue;
+        const ni = ny * width + nx;
+        if (edges[ni] === WEAK) {
+          edges[ni] = STRONG;
+          queue.push(ni);
+        }
       }
     }
+  }
+  // Suppress any weak edges that never connected to a strong edge
+  for (let i = 0; i < edges.length; i++) {
+    if (edges[i] === WEAK) edges[i] = 0;
   }
 
   const dst = blankLike(src);

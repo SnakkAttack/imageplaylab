@@ -10,9 +10,10 @@ import type { HistogramData } from "@/types/image";
 interface HistogramViewProps {
   histogramData: HistogramData | null;
   mode?: "luminance" | "rgb";
+  threshold?: number;
 }
 
-export function HistogramView({ histogramData, mode = "luminance" }: HistogramViewProps) {
+export function HistogramView({ histogramData, mode = "luminance", threshold }: HistogramViewProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -41,13 +42,27 @@ export function HistogramView({ histogramData, mode = "luminance" }: HistogramVi
         ctx.fillRect(i * bW, H - bH, Math.max(bW - 0.2, 0.5), bH);
       }
     }
-  }, [histogramData, mode]);
+
+    // amber vertical line at threshold value
+    if (threshold !== undefined) {
+      const x = Math.round((threshold / 255) * W);
+      ctx.save();
+      ctx.strokeStyle = "#FFAA00";
+      ctx.lineWidth = 1.5;
+      ctx.globalAlpha = 0.9;
+      ctx.beginPath();
+      ctx.moveTo(x, 0);
+      ctx.lineTo(x, H);
+      ctx.stroke();
+      ctx.restore();
+    }
+  }, [histogramData, mode, threshold]);
 
   if (!histogramData) {
     return (
       <div className="h-14 flex items-end gap-px px-0.5">
         {Array.from({ length: 24 }, (_, i) => (
-          <div key={i} className="flex-1 rounded-sm bg-night-400" style={{ height: `${20 + Math.sin(i) * 15}%` }} />
+          <div key={i} className="flex-1 rounded-sm bg-night-400" style={{ height: `${(20 + Math.sin(i) * 15).toFixed(2)}%` }} />
         ))}
       </div>
     );

@@ -2,6 +2,9 @@ import Link from "next/link";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 
+// Update this to change the support link everywhere
+const SUPPORT_URL = "https://ko-fi.com/snakky";
+
 export const metadata = {
   title: "About | Image Play Lab",
   description: "About Image Play Lab: an interactive image processing educational tool.",
@@ -73,7 +76,7 @@ export default function AboutPage() {
 
         {/* Why */}
         <section className="mb-14">
-          <p className="font-mono text-3xs text-amber uppercase tracking-[0.2em] mb-6">Why I built this</p>
+          <p className="font-mono text-3xs text-amber uppercase tracking-[0.2em] mb-6">Why we built this</p>
           <div className="flex flex-col gap-4 font-mono text-xs text-night-50 leading-[1.9]">
             <p>
               Image processing is one of those subjects where the gap between reading about it
@@ -152,7 +155,7 @@ types/image.ts             TypeScript interfaces`}</pre>
         </section>
 
         {/* CTA */}
-        <div className="border border-night-400 rounded p-5 sm:p-8 flex flex-col items-center text-center gap-5 bg-night-700">
+        <div className="border border-night-400 rounded p-5 sm:p-8 flex flex-col items-center text-center gap-5 bg-night-700 mb-14">
           <p className="font-mono text-3xs text-amber uppercase tracking-[0.2em]">Try it yourself</p>
           <p className="font-mono text-lg font-bold text-night leading-tight">
             No login. No install.<br />Open the lab and start learning.
@@ -164,6 +167,47 @@ types/image.ts             TypeScript interfaces`}</pre>
             Open Lab →
           </Link>
         </div>
+
+        {/* Support */}
+        <section id="support" className="border-t border-night-400 pt-10 pb-4">
+          <p className="font-mono text-3xs text-amber/60 uppercase tracking-[0.2em] mb-5">Support Development</p>
+          <p className="font-mono text-xs text-night-50 leading-[1.9] mb-6">
+            Image Play Lab is a free educational project built for students, educators, and curious minds.
+            If this tool is useful in your classroom, coursework, or personal learning, optional support
+            helps maintain the site and fund future improvements.
+          </p>
+          <div className="mb-7">
+            <p className="font-mono text-3xs text-night-200 uppercase tracking-wider mb-3">Planned additions</p>
+            <ul className="flex flex-col gap-1.5">
+              {[
+                "More image processing modules",
+                "Teacher and classroom features",
+                "Exportable experiment reports",
+                "Student worksheets",
+                "Additional visual explanations",
+              ].map((item) => (
+                <li key={item} className="flex items-start gap-2.5 font-mono text-3xs text-night-100">
+                  <span className="text-amber/30 shrink-0 mt-0.5">-</span>
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="flex flex-col items-start gap-3">
+            <a
+              href={SUPPORT_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Support Image Play Lab on Ko-fi (opens in new tab)"
+              className="inline-flex items-center gap-2 font-mono text-2xs text-amber border border-amber/25 hover:border-amber/60 hover:bg-amber/5 transition-colors px-4 py-2 rounded"
+            >
+              Support the project ↗
+            </a>
+            <p className="font-mono text-3xs text-night-300 leading-relaxed">
+              No features are locked. Image Play Lab is intended to remain free to use.
+            </p>
+          </div>
+        </section>
 
       </main>
       <Footer />

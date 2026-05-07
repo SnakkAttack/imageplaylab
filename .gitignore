@@ -44,3 +44,9 @@ yarn-error.log*
 
 # misc
 *.pem
+
+# handoff doc
+handoff.md
+
+# class notes / slideshows (local only)
+notes/

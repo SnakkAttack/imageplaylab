@@ -1,6 +1,4 @@
-/**
- * Shared canvas utilities for creating, reading, and writing ImageData.
- */
+// Shared helpers for working with ImageData across all processing modules.
 
 export function imageDataToCanvas(imageData: ImageData): HTMLCanvasElement {
   const canvas = document.createElement("canvas");
@@ -17,22 +15,21 @@ export function canvasToImageData(canvas: HTMLCanvasElement): ImageData {
 }
 
 export function cloneImageData(src: ImageData): ImageData {
-  const dst = new ImageData(new Uint8ClampedArray(src.data), src.width, src.height);
-  return dst;
+  return new ImageData(new Uint8ClampedArray(src.data), src.width, src.height);
 }
 
-/** Create a blank ImageData of the same size. */
+// blank ImageData with same width/height as src, all zeros
 export function blankLike(src: ImageData): ImageData {
   return new ImageData(new Uint8ClampedArray(src.width * src.height * 4), src.width, src.height);
 }
 
-/** Read a pixel value from flat RGBA array. Returns [r, g, b, a]. */
+// returns [r, g, b, a] for pixel at (x, y)
 export function getPixel(data: Uint8ClampedArray, x: number, y: number, width: number): [number, number, number, number] {
   const idx = (y * width + x) * 4;
   return [data[idx], data[idx + 1], data[idx + 2], data[idx + 3]];
 }
 
-/** Write a pixel into flat RGBA array. */
+// write r,g,b,a into pixel at (x, y)
 export function setPixel(data: Uint8ClampedArray, x: number, y: number, width: number, r: number, g: number, b: number, a = 255): void {
   const idx = (y * width + x) * 4;
   data[idx] = r;
@@ -41,17 +38,16 @@ export function setPixel(data: Uint8ClampedArray, x: number, y: number, width: n
   data[idx + 3] = a;
 }
 
-/** Clamp a value to [0, 255]. */
+// clamp to [0, 255]
 export function clamp255(v: number): number {
   return Math.max(0, Math.min(255, Math.round(v)));
 }
 
-/** Convert RGB to perceived luminance (ITU-R BT.601). */
+// perceived brightness using ITU-R BT.601 weights (green weighted most, blue least)
 export function luminance(r: number, g: number, b: number): number {
   return 0.299 * r + 0.587 * g + 0.114 * b;
 }
 
-/** Load an image URL into ImageData via an offscreen canvas. */
 export async function loadImageFromUrl(url: string): Promise<ImageData> {
   return new Promise((resolve, reject) => {
     const img = new Image();
@@ -69,7 +65,7 @@ export async function loadImageFromUrl(url: string): Promise<ImageData> {
   });
 }
 
-/** Resize ImageData to fit within maxDim × maxDim, preserving aspect ratio. */
+// downscale to fit within maxDim x maxDim, keeping aspect ratio
 export function resizeImageData(src: ImageData, maxDim: number): ImageData {
   const { width, height } = src;
   if (width <= maxDim && height <= maxDim) return src;
@@ -85,7 +81,7 @@ export function resizeImageData(src: ImageData, maxDim: number): ImageData {
   return ctx.getImageData(0, 0, newW, newH);
 }
 
-/** Convert ImageData to a data URL (PNG). */
+// render ImageData to a canvas and export as PNG data URL
 export function imageDataToDataUrl(imageData: ImageData): string {
   const canvas = imageDataToCanvas(imageData);
   return canvas.toDataURL("image/png");

@@ -1,4 +1,4 @@
-// Canvas area: shows original vs processed in split, slider, or result-only modes.
+// Canvas area: shows original vs processed in split, slider, result, or kernel modes.
 // The slider mode was tricky, had to track drag state in a ref instead of state
 // so mousemove handlers don't stale-close over old slider positions.
 // Sam
@@ -7,27 +7,44 @@
 import { useRef, useEffect, useState } from "react";
 import { imageDataToDataUrl } from "@/lib/image-processing/canvas-utils";
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
-import type { ImageState } from "@/types/image";
+import { KernelVisualizer, KERNEL_OPS } from "./KernelVisualizer";
+import type { ImageState, OperationParams } from "@/types/image";
 
-type ViewMode = "split" | "slider" | "result";
-
-const VIEW_OPTS: { value: ViewMode; label: string }[] = [
-  { value: "split",  label: "Split" },
-  { value: "slider", label: "Slider" },
-  { value: "result", label: "Result" },
-];
+type ViewMode = "split" | "slider" | "result" | "kernel";
 
 interface ImageWorkspaceProps {
   imageState: ImageState;
   operationLabel: string;
+  processedLabel?: string;
+  operationId?: string;
+  params?: OperationParams;
 }
 
-export function ImageWorkspace({ imageState, operationLabel }: ImageWorkspaceProps) {
+export function ImageWorkspace({ imageState, operationLabel, processedLabel, operationId, params }: ImageWorkspaceProps) {
+  const procLabel = processedLabel ?? operationLabel;
   const { original, processed, width, height, fileName, fileSize, fileType } = imageState;
   const [mode, setMode]       = useState<ViewMode>("split");
   const [sliderX, setSliderX] = useState(0.5);
   const sliderRef  = useRef<HTMLDivElement>(null);
   const dragging   = useRef(false);
+
+  const hasKernel = !!operationId && KERNEL_OPS.has(operationId);
+  const isHistView = operationId === "histogram_view";
+
+  // bounce to result when switching to histogram_view; bounce out of kernel when no kernel
+  useEffect(() => {
+    if (isHistView) setMode("result");
+    else if (!hasKernel && mode === "kernel") setMode("split");
+  }, [isHistView, hasKernel, mode]);
+
+  const viewOpts = isHistView
+    ? [{ value: "result" as ViewMode, label: "Result" }]
+    : [
+        { value: "split"  as ViewMode, label: "Split"  },
+        { value: "slider" as ViewMode, label: "Slider" },
+        { value: "result" as ViewMode, label: "Result" },
+        ...(hasKernel ? [{ value: "kernel" as ViewMode, label: "Kernel" }] : []),
+      ];
 
   const origUrl = original  ? imageDataToDataUrl(original)  : null;
   const procUrl = processed ? imageDataToDataUrl(processed) : null;
@@ -58,7 +75,7 @@ export function ImageWorkspace({ imageState, operationLabel }: ImageWorkspacePro
     <div className="flex flex-col flex-1 min-h-0">
       {/* Toolbar */}
       <div className="h-9 shrink-0 flex items-center gap-3 px-3 bg-night-700 border-b border-night-400">
-        <SegmentedControl options={VIEW_OPTS} value={mode} onChange={setMode} />
+        <SegmentedControl options={viewOpts} value={mode} onChange={setMode} />
         <div className="flex-1" />
         {width > 0 && (
           <div className="flex items-center gap-2 font-mono text-3xs text-night-100">
@@ -85,7 +102,7 @@ export function ImageWorkspace({ imageState, operationLabel }: ImageWorkspacePro
         {mode === "split" && (
           <div className="h-full grid grid-cols-2 gap-px bg-night-400">
             <Pane label="original" url={origUrl} />
-            <Pane label={operationLabel.toLowerCase()} url={procUrl} accent />
+            <Pane label={procLabel.toLowerCase()} url={procUrl} accent />
           </div>
         )}
 
@@ -111,7 +128,7 @@ export function ImageWorkspace({ imageState, operationLabel }: ImageWorkspacePro
               </div>
             </div>
             <Label text="original" position="left" />
-            <Label text={operationLabel.toLowerCase()} position="right" accent />
+            <Label text={procLabel.toLowerCase()} position="right" accent />
           </div>
         )}
 
@@ -121,6 +138,15 @@ export function ImageWorkspace({ imageState, operationLabel }: ImageWorkspacePro
               ? <img src={procUrl} alt="result" className="max-w-full max-h-full object-contain animate-fade-in" draggable={false} />
               : <span className="font-mono text-2xs text-night-200">no output</span>
             }
+          </div>
+        )}
+
+        {mode === "kernel" && operationId && params && (
+          <div className="h-full flex flex-col items-center justify-center gap-6 p-8">
+            <p className="font-mono text-xs text-night-100 uppercase tracking-widest">
+              {operationLabel.toLowerCase()} kernel
+            </p>
+            <KernelVisualizer operationId={operationId} params={params} size="lg" />
           </div>
         )}
       </div>

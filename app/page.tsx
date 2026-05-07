@@ -3,13 +3,13 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 
 const MODULES = [
-  { n: "01", name: "IMAGE BASICS",    ops: ["Pixels", "RGB channels", "Grayscale", "Brightness", "Contrast"] },
+  { n: "01", name: "IMAGE BASICS",    ops: ["Grayscale", "RGB channels", "Brightness", "Contrast", "Gamma", "Invert", "Sepia"] },
   { n: "02", name: "NOISE",           ops: ["Gaussian", "Salt & Pepper", "Uniform"] },
-  { n: "03", name: "FILTERING",       ops: ["Mean", "Gaussian blur", "Median", "Bilateral"] },
-  { n: "04", name: "EDGE DETECTION",  ops: ["Sobel", "Laplacian", "Canny"] },
+  { n: "03", name: "FILTERING",       ops: ["Mean", "Gaussian", "Median", "Bilateral", "Sharpen", "Emboss"] },
+  { n: "04", name: "EDGE DETECTION",  ops: ["Sobel", "Prewitt", "Scharr", "Laplacian", "Canny"] },
   { n: "05", name: "THRESHOLDING",    ops: ["Binary", "Inverse", "Otsu auto"] },
   { n: "06", name: "HISTOGRAM",       ops: ["View", "Equalization", "Stretch"] },
-  { n: "07", name: "MORPHOLOGY",      ops: ["Erosion", "Dilation", "Opening", "Closing"] },
+  { n: "07", name: "MORPHOLOGY",      ops: ["Erosion", "Dilation", "Opening", "Closing", "Gradient"] },
   { n: "08", name: "METRICS",         ops: ["MSE", "PSNR", "SSIM"] },
 ];
 

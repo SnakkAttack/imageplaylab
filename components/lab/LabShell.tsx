@@ -47,9 +47,14 @@ export function LabShell() {
   const [otsuThreshold, setOtsuThreshold]   = useState<number | undefined>(undefined);
   const [processing, setProcessing]         = useState(false);
   const [hasImage, setHasImage]             = useState(false);
-  const debounce = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [lastOpLabel, setLastOpLabel]       = useState("original");
+  const debounce      = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const imageStateRef = useRef(imageState);
+  useEffect(() => { imageStateRef.current = imageState; }, [imageState]);
 
-  const activeModule = MODULE_DEFS.find((m) => m.id === activeModuleId)!;
+  const activeModule   = MODULE_DEFS.find((m) => m.id === activeModuleId)!;
+  const activeOpDef    = activeModule.operations.find((o) => o.id === activeOp.operationId);
+  const operationLabel = activeOpDef?.label ?? activeModule.label;
 
   const runProcessing = useCallback((original: ImageData, op: ActiveOperation) => {
     setProcessing(true);
@@ -69,7 +74,7 @@ export function LabShell() {
         setOtsuThreshold(otsu);
         setImageState((prev) => ({ ...prev, processed }));
 
-        const trivial = ["original", "histogram_view", "metrics_view"];
+        const trivial = ["original", "histogram_view"];
         if (!trivial.includes(op.operationId)) {
           setMetrics(computeMetrics(original, processed));
           setHistogram(computeHistogram(processed));
@@ -85,6 +90,8 @@ export function LabShell() {
 
   useEffect(() => {
     if (!imageState.original) return;
+    if (activeModuleId === "metrics") return; // metrics reads last processed, never re-processes
+    setLastOpLabel(operationLabel);
     if (debounce.current) clearTimeout(debounce.current);
     debounce.current = setTimeout(() => {
       runProcessing(imageState.original!, {
@@ -94,7 +101,7 @@ export function LabShell() {
       });
     }, 60);
     return () => { if (debounce.current) clearTimeout(debounce.current); };
-  }, [activeModuleId, activeOp, imageState.original, runProcessing]);
+  }, [activeModuleId, activeOp, imageState.original, runProcessing, operationLabel]);
 
   const handleImageLoaded = useCallback((imageData: ImageData, meta: { name: string; size: number; type: string }) => {
     const original = cloneImageData(imageData);
@@ -110,6 +117,16 @@ export function LabShell() {
 
   const handleModuleChange = useCallback((id: ModuleId) => {
     setActiveModuleId(id);
+    if (id === "metrics") {
+      // freeze canvas at last processed image, compute metrics on it vs original
+      setActiveOp(getDefaultOp("metrics"));
+      const { original, processed } = imageStateRef.current;
+      if (original && processed) {
+        setMetrics(computeMetrics(original, processed));
+        setHistogram(computeHistogram(processed));
+      }
+      return;
+    }
     setActiveOp(getDefaultOp(id));
     setMetrics(null);
   }, []);
@@ -131,9 +148,6 @@ export function LabShell() {
     setHistogram(null);
   }, []);
 
-  const activeOpDef    = activeModule.operations.find((o) => o.id === activeOp.operationId);
-  const operationLabel = activeOpDef?.label ?? activeModule.label;
-
   return (
     <div className="flex-1 flex flex-col min-h-0">
       {/* Module tabs strip */}
@@ -147,7 +161,7 @@ export function LabShell() {
       {/* Main content */}
       <div className="flex-1 flex flex-col md:grid md:grid-cols-[1fr_240px] min-h-0 divide-y md:divide-y-0 md:divide-x divide-night-400">
 
-        {/* ── Center: image workspace ──────────────────────────── */}
+        {/* ── Center: image workspace + insights ───────────────── */}
         <main className="flex flex-col min-h-0 flex-1 md:flex-none">
           {hasImage ? (
             <>
@@ -170,11 +184,20 @@ export function LabShell() {
                   change image
                 </button>
               </div>
-              <ImageWorkspace imageState={imageState} operationLabel={operationLabel} />
+              <ImageWorkspace
+                imageState={imageState}
+                operationLabel={operationLabel}
+                processedLabel={activeModuleId === "metrics" ? lastOpLabel : operationLabel}
+                operationId={activeOp.operationId}
+                params={activeOp.params}
+              />
             </>
           ) : (
             <ImageUploader onImageLoaded={handleImageLoaded} />
           )}
+
+          {/* Insights panel: full width below the canvas */}
+          <ExplanationCard explanation={activeModule.explanation} />
         </main>
 
         {/* ── Right: instrument panel ──────────────────────────── */}
@@ -210,7 +233,15 @@ export function LabShell() {
                 onChange={setHistMode}
               />
             </div>
-            <HistogramView histogramData={histogram} mode={histMode} />
+            <HistogramView
+              histogramData={histogram}
+              mode={histMode}
+              threshold={
+                activeModuleId === "threshold"
+                  ? (activeOp.operationId === "otsu" ? otsuThreshold : Number(activeOp.params.threshold ?? 128))
+                  : undefined
+              }
+            />
           </div>
 
           {/* Metrics: only visible in the metrics module */}
@@ -220,9 +251,6 @@ export function LabShell() {
               <MetricCard metrics={metrics} isProcessed={hasImage} />
             </div>
           )}
-
-          {/* Insights */}
-          <ExplanationCard explanation={activeModule.explanation} />
         </aside>
       </div>
     </div>
