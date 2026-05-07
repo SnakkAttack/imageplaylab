@@ -11,9 +11,10 @@ export function Footer() {
           <span className="font-mono text-2xs text-night-50">Image Play Lab</span>
         </div>
         <nav className="flex items-center gap-4">
-          <Link href="/"     className="font-mono text-3xs text-night-100 hover:text-amber transition-colors">Home</Link>
-          <Link href="/lab"  className="font-mono text-3xs text-night-100 hover:text-amber transition-colors">Lab</Link>
-          <Link href="/about" className="font-mono text-3xs text-night-100 hover:text-amber transition-colors">About</Link>
+          <Link href="/"            className="font-mono text-3xs text-night-100 hover:text-amber transition-colors">Home</Link>
+          <Link href="/lab"         className="font-mono text-3xs text-night-100 hover:text-amber transition-colors">Lab</Link>
+          <Link href="/about"       className="font-mono text-3xs text-night-100 hover:text-amber transition-colors">About</Link>
+          <Link href="/about#support" className="font-mono text-3xs text-night-200 hover:text-amber/70 transition-colors">Support development</Link>
         </nav>
         <span className="font-mono text-3xs text-night-200">
           Interactive image processing, built for learning

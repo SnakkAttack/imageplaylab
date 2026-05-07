@@ -1,5 +1,6 @@
 "use client";
 import { SliderControl } from "@/components/ui/SliderControl";
+import { KernelVisualizer } from "./KernelVisualizer";
 import type { ModuleDef, OperationDef, OperationParams, SliderParam, SelectParam } from "@/types/image";
 
 function isSlider(p: SliderParam | SelectParam): p is SliderParam { return "min" in p; }
@@ -83,6 +84,11 @@ export function ControlPanel({ module, activeOperationId, params, onOperationCha
             );
           })}
         </div>
+      )}
+
+      {/* Kernel visualizer */}
+      {activeOp && (
+        <KernelVisualizer operationId={activeOperationId} params={params} />
       )}
 
       {/* Otsu result */}

@@ -1,6 +1,6 @@
 import { blankLike, luminance } from "./canvas-utils";
 
-/** Convert image to binary grayscale (0 or 255) for morphological ops. */
+// convert to binary (0 or 255) so morphological ops work on clean black/white regions
 function toBinaryGray(src: ImageData): Uint8Array {
   const binary = new Uint8Array(src.width * src.height);
   for (let i = 0; i < binary.length; i++) {
@@ -72,7 +72,7 @@ export function applyDilation(src: ImageData, kernelSize: number): ImageData {
   return binaryToImageData(out, src.width, src.height);
 }
 
-/** Opening = erosion then dilation */
+// opening = erosion then dilation, removes small bright specs
 export function applyOpening(src: ImageData, kernelSize: number): ImageData {
   const k = Math.max(3, kernelSize % 2 === 0 ? kernelSize + 1 : kernelSize);
   const half = Math.floor(k / 2);
@@ -82,7 +82,7 @@ export function applyOpening(src: ImageData, kernelSize: number): ImageData {
   return binaryToImageData(opened, src.width, src.height);
 }
 
-/** Closing = dilation then erosion */
+// closing = dilation then erosion, fills small dark holes
 export function applyClosing(src: ImageData, kernelSize: number): ImageData {
   const k = Math.max(3, kernelSize % 2 === 0 ? kernelSize + 1 : kernelSize);
   const half = Math.floor(k / 2);
@@ -90,4 +90,18 @@ export function applyClosing(src: ImageData, kernelSize: number): ImageData {
   const dilated = applyDilationRaw(binary, src.width, src.height, half);
   const closed = applyErosionRaw(dilated, src.width, src.height, half);
   return binaryToImageData(closed, src.width, src.height);
+}
+
+// gradient = dilation minus erosion, gives the outline of binary regions
+export function applyMorphGradient(src: ImageData, kernelSize: number): ImageData {
+  const k = Math.max(3, kernelSize % 2 === 0 ? kernelSize + 1 : kernelSize);
+  const half = Math.floor(k / 2);
+  const binary = toBinaryGray(src);
+  const dilated = applyDilationRaw(binary, src.width, src.height, half);
+  const eroded  = applyErosionRaw(binary, src.width, src.height, half);
+  const grad = new Uint8Array(src.width * src.height);
+  for (let i = 0; i < grad.length; i++) {
+    grad[i] = dilated[i] - eroded[i];
+  }
+  return binaryToImageData(grad, src.width, src.height);
 }

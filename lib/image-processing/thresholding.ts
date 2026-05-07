@@ -38,11 +38,7 @@ export function applyInverseThreshold(src: ImageData, threshold: number): ImageD
   return dst;
 }
 
-/**
- * Otsu's method: sweep all possible thresholds 0-254 and pick the one that
- * maximizes inter-class variance (= variance between the two pixel groups).
- * Returns the optimal threshold and the resulting binary ImageData.
- */
+// Otsu's method: try every threshold 0-254, pick the one with highest inter-class variance
 export function applyOtsuThreshold(src: ImageData): { imageData: ImageData; threshold: number } {
   const gray  = toGrayArray(src);
   const total = gray.length;
