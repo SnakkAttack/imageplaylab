@@ -28,7 +28,7 @@ export function ExplanationCard({ explanation }: { explanation: ModuleExplanatio
 
   return (
     <div className="shrink-0 border-t border-night-400 bg-night-800">
-      {/* Header row */}
+      {/* Header row — toggle hidden on mobile (content always visible) */}
       <div className="flex items-center justify-between px-4 py-2 border-b border-night-400">
         <div className="flex items-center gap-4">
           <p className="font-mono text-3xs text-night-100 uppercase tracking-widest">Insights</p>
@@ -36,7 +36,7 @@ export function ExplanationCard({ explanation }: { explanation: ModuleExplanatio
         </div>
         <button
           onClick={() => setOpen((o) => !o)}
-          className="flex items-center gap-1.5 font-mono text-3xs text-night-100 hover:text-amber transition-colors"
+          className="hidden md:flex items-center gap-1.5 font-mono text-3xs text-night-100 hover:text-amber transition-colors"
         >
           {open ? "collapse" : "expand"}
           <svg className={`w-3 h-3 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
@@ -46,7 +46,8 @@ export function ExplanationCard({ explanation }: { explanation: ModuleExplanatio
         </button>
       </div>
 
-      {open && (
+      {/* Mobile: always shown. Desktop: toggled by open state. */}
+      <div className={open ? "" : "md:hidden"}>
         <div className="flex flex-col md:flex-row min-h-0">
           {/* Tab sidebar */}
           <div className="flex md:flex-col gap-0 border-b md:border-b-0 md:border-r border-night-400 shrink-0">
@@ -76,7 +77,7 @@ export function ExplanationCard({ explanation }: { explanation: ModuleExplanatio
             </div>
           </div>
         </div>
-      )}
+      </div>
     </div>
   );
 }
