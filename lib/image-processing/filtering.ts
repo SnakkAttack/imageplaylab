@@ -1,3 +1,6 @@
+// Spatial filters: mean, Gaussian, median, bilateral, sharpen, emboss.
+// Gage
+
 import { blankLike, clamp255, luminance } from "./canvas-utils";
 
 // apply a 2D kernel to one color channel, returns a float array

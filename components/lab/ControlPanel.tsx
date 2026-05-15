@@ -1,3 +1,6 @@
+// Sidebar panel: operation list, parameter sliders, kernel preview, reset button.
+// Sam
+
 "use client";
 import { SliderControl } from "@/components/ui/SliderControl";
 import { KernelVisualizer } from "./KernelVisualizer";

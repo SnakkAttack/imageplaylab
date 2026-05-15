@@ -1,3 +1,6 @@
+// Morphological operations on binary images: erosion, dilation, opening, closing, gradient.
+// Gage
+
 import { blankLike, luminance } from "./canvas-utils";
 
 // convert to binary (0 or 255) so morphological ops work on clean black/white regions

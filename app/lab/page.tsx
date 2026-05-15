@@ -1,3 +1,6 @@
+// Lab route — thin wrapper so LabShell stays a client component.
+// Sam
+
 import { LabShell } from "@/components/lab/LabShell";
 import { Header }   from "@/components/layout/Header";
 

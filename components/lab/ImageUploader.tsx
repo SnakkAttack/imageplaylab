@@ -45,7 +45,7 @@ export function ImageUploader({ onImageLoaded }: ImageUploaderProps) {
       onImageLoaded(canvas.getContext("2d")!.getImageData(0, 0, canvas.width, canvas.height),
         { name: file.name, size: file.size, type: file.type });
       if (scale < 1) setError(`Resized to ${canvas.width}×${canvas.height} px for performance.`);
-    } catch { setError("Failed to load. File may be corrupted."); }
+    } catch (err) { console.error("Image load failed:", err); setError("Failed to load. File may be corrupted."); }
     finally   { setLoading(false); }
   }, [onImageLoaded]);
 

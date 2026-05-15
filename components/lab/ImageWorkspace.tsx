@@ -4,7 +4,7 @@
 // Sam
 
 "use client";
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, useMemo } from "react";
 import { imageDataToDataUrl } from "@/lib/image-processing/canvas-utils";
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
 import { KernelVisualizer, KERNEL_OPS } from "./KernelVisualizer";
@@ -46,8 +46,8 @@ export function ImageWorkspace({ imageState, operationLabel, processedLabel, ope
         ...(hasKernel ? [{ value: "kernel" as ViewMode, label: "Kernel" }] : []),
       ];
 
-  const origUrl = original  ? imageDataToDataUrl(original)  : null;
-  const procUrl = processed ? imageDataToDataUrl(processed) : null;
+  const origUrl = useMemo(() => original  ? imageDataToDataUrl(original)  : null, [original]);
+  const procUrl = useMemo(() => processed ? imageDataToDataUrl(processed) : null, [processed]);
 
   const updateSlider = (clientX: number) => {
     if (!sliderRef.current) return;

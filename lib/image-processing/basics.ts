@@ -1,3 +1,6 @@
+// Fundamental pixel operations: grayscale, channel isolation, brightness, contrast, gamma, sepia, invert.
+// Gage
+
 import { cloneImageData, blankLike, clamp255, luminance } from "./canvas-utils";
 
 export function applyGrayscale(src: ImageData): ImageData {
@@ -83,7 +86,7 @@ export function applyInvert(src: ImageData): ImageData {
 export function applySepia(src: ImageData): ImageData {
   const dst = cloneImageData(src);
   const { data } = dst;
-  // Standard sepia coefficients from the ITU recommendation
+  // Standard sepia matrix from the W3C filter spec
   for (let i = 0; i < data.length; i += 4) {
     const r = data[i], g = data[i + 1], b = data[i + 2];
     data[i]     = clamp255(r * 0.393 + g * 0.769 + b * 0.189);

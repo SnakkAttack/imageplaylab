@@ -1,3 +1,6 @@
+// Module definitions: operations, parameter specs, and educational copy for each module.
+// Gage
+
 import type { ModuleDef } from "@/types/image";
 
 export const MODULE_DEFS: ModuleDef[] = [
@@ -639,15 +642,4 @@ export const MODULE_DEFS: ModuleDef[] = [
         "Evaluating compression codecs (JPEG, WebP). Comparing noise reduction filters on the same noisy input. Benchmarking image restoration algorithms. PSNR is the classic metric but SSIM is increasingly preferred because it correlates better with human ratings. These metrics are most useful when comparing methods, not as absolute pass/fail thresholds.",
     },
   },
-];
-
-export const MODULE_ORDER: ModuleDef["id"][] = [
-  "basics",
-  "noise",
-  "filtering",
-  "edges",
-  "threshold",
-  "histogram",
-  "morphology",
-  "metrics",
 ];

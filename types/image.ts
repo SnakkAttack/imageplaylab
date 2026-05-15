@@ -1,3 +1,6 @@
+// Shared TypeScript types used across the whole app.
+// Sam
+
 export type ModuleId =
   | "basics"
   | "noise"
@@ -74,7 +77,7 @@ export interface ActiveOperation {
 export interface ImageMetrics {
   mse: number;
   psnr: number;
-  ssim?: number;
+  ssim: number;
 }
 
 export interface HistogramData {

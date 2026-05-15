@@ -1,3 +1,6 @@
+// Site header — two variants: default (home/about) and lab (compact).
+// Sam
+
 import Link from "next/link";
 
 interface HeaderProps {

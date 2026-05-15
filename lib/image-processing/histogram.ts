@@ -1,3 +1,7 @@
+// Histogram computation, equalization, and stretch. Includes a renderer that draws
+// the luminance distribution directly into an ImageData for canvas display.
+// Gage
+
 import { blankLike, luminance } from "./canvas-utils";
 import type { HistogramData } from "@/types/image";
 

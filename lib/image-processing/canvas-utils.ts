@@ -1,4 +1,5 @@
 // Shared helpers for working with ImageData across all processing modules.
+// Gage
 
 export function imageDataToCanvas(imageData: ImageData): HTMLCanvasElement {
   const canvas = document.createElement("canvas");
@@ -38,7 +39,6 @@ export function setPixel(data: Uint8ClampedArray, x: number, y: number, width: n
   data[idx + 3] = a;
 }
 
-// clamp to [0, 255]
 export function clamp255(v: number): number {
   return Math.max(0, Math.min(255, Math.round(v)));
 }
@@ -81,7 +81,6 @@ export function resizeImageData(src: ImageData, maxDim: number): ImageData {
   return ctx.getImageData(0, 0, newW, newH);
 }
 
-// render ImageData to a canvas and export as PNG data URL
 export function imageDataToDataUrl(imageData: ImageData): string {
   const canvas = imageDataToCanvas(imageData);
   return canvas.toDataURL("image/png");

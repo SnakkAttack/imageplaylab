@@ -1,3 +1,6 @@
+// About page: contributors, concept coverage, tech stack, architecture.
+// Sam
+
 import Link from "next/link";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
@@ -22,7 +25,7 @@ const CONCEPTS = [
 ];
 
 const TECH = [
-  { name: "Next.js 16",   role: "App framework + Turbopack" },
+  { name: "Next.js 15",   role: "App framework + Turbopack" },
   { name: "TypeScript",   role: "Strict mode throughout" },
   { name: "Tailwind CSS", role: "Utility-first styling" },
   { name: "Canvas API",   role: "All processing client-side" },

@@ -1,3 +1,6 @@
+// Landing page: hero, module manifest, workflow steps, tech spec.
+// Sam
+
 import Link from "next/link";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
@@ -261,7 +264,7 @@ export default function HomePage() {
             <p className="font-mono text-3xs text-amber uppercase tracking-[0.2em] mb-6">Architecture</p>
             <div className="flex flex-col gap-0 divide-y divide-night-400">
               {[
-                { k: "Framework",    v: "Next.js 16 + Turbopack" },
+                { k: "Framework",    v: "Next.js 15 + Turbopack" },
                 { k: "Language",     v: "TypeScript (strict)" },
                 { k: "Styling",      v: "Tailwind CSS" },
                 { k: "Processing",   v: "Canvas API (client-side)" },
