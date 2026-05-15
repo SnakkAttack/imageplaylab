@@ -59,23 +59,6 @@ All image processing algorithms are implemented from scratch in TypeScript with 
 
 ---
 
-## Getting Started
-
-```bash
-# Install dependencies
-npm install
-
-# Generate built-in sample images (run once)
-node scripts/generate-samples.mjs
-
-# Start the dev server
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000).
-
----
-
 ## Project Structure
 
 ```text
@@ -101,17 +84,6 @@ scripts/
   generate-samples.mjs  Generates sample images using Node built-ins
 ```
 
----
-
-## Deploying to Vercel
-
-```bash
-# Push to GitHub then connect the repo in the Vercel dashboard
-# No environment variables needed; fully static/client-side
-```
-
----
-
 ## Academic Purpose
 
 This project demonstrates the following concepts from a standard image processing curriculum:
@@ -125,16 +97,3 @@ This project demonstrates the following concepts from a standard image processin
 - **Histogram analysis**: brightness distributions, CDF-based equalization
 - **Morphological operations**: erosion/dilation on binary images, structuring elements, opening/closing
 - **Quality metrics**: MSE, PSNR in dB, structural similarity index (SSIM)
-
----
-
-## Future Improvements
-
-- Save/restore experiment configurations
-- Student worksheets for guided exploration
-- Knowledge-check quizzes per module
-- Teacher mode with annotation and presentation tools
-- Webcam live feed processing
-- FFT and frequency-domain operations
-- Feature detection (Harris corners, SIFT descriptors)
-- Image segmentation (k-means, watershed)
